@@ -7,3 +7,5 @@ python-dateutil >= 2.8
 spacy >= 3.2
 tqdm >= 4.63
 typer >= 0.4
+rdflib
+kglab
