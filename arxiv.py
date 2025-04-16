@@ -488,7 +488,7 @@ optional - path to the PNG file for the rendered diagram
 
     for query in tqdm(sorted(set(df["topic"])), desc="Topic"):
         df_sub = df[df["topic"] == query]
-        df_samp = df_sub.resample("M").sum()
+        df_samp = df_sub.resample("ME").sum()
         df_list.append(df_samp.rename(columns={ "counts": query }))
 
     df_full = pd.concat(df_list, axis=1, join="inner").reindex(df_samp.index).fillna(0)
@@ -521,7 +521,9 @@ optional - path to the PNG file for the rendered diagram
     plot[0].set(ylabel="monthly counts")
 
     summary = list(df.groupby("topic").sum().to_dict()["counts"].items())
-    y_max = round(max(df_full.max(axis=1)) + 10.0)
+    # y_max = round(max(df_full.max(axis=1)) + 10.0)
+    numeric_df = df_full.select_dtypes(include='number')
+    y_max = round(numeric_df.max(axis=1).max() + 10.0)
 
     for index, ax in enumerate(plot):
         query, count = summary[index]
